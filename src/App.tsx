@@ -7,6 +7,9 @@ class App extends React.Component{
         return(
             <div className="plus">
                 hello
+                <div className="test">
+                    aljskjahn
+                </div>
             </div>
         )
     }

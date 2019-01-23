@@ -1,12 +1,13 @@
 const path=require("path");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
 
 module.exports={
     mode:'development',
     entry: './src/index.tsx',
-    devtool: "inline-source-map",
-    module:{
 
+    module:{
         rules:[
             {
                 test: /\.(jpg|png|gif|svg|pdf|ico)$/,
@@ -33,9 +34,14 @@ module.exports={
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader'
-                }
+                use: [
+                    {
+                        loader: 'babel-loader'
+                    },
+                    {
+                        loader: 'source-map-loader'
+                    }
+                ]
             },
             {
                 test:/\.less$/,
@@ -44,7 +50,8 @@ module.exports={
                     {
                         loader: 'css-loader',
                         options: {
-                            modules:true
+                            modules:true,
+                            localIdentName: '[path][name]__[local]--[hash:base64:5]'
                         }
                     },
                     {
@@ -72,8 +79,6 @@ module.exports={
         new HtmlWebpackPlugin({
             template: "./index.html"
         })
-    ]
-
-
-
+    ],
+    devtool: "inline-source-map"
 };
