@@ -1,12 +1,22 @@
 const path=require("path");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+const { CheckerPlugin } = require('awesome-typescript-loader');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
 
 
 module.exports={
     mode:'development',
     entry: './src/index.tsx',
+    output: {
+    path:path.resolve(__dirname, "build"),
+        filename:"bundle.js",
+    },
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js',"json"]
 
+    },
     module:{
         rules:[
             {
@@ -32,6 +42,7 @@ module.exports={
                 ]
             },
             {
+                enforce: "pre",
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: [
@@ -46,38 +57,26 @@ module.exports={
             {
                 test:/\.less$/,
                 use:[
-                    { loader: 'style-loader' },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules:true,
-                            localIdentName: '[path][name]__[local]--[hash:base64:5]'
-                        }
-                    },
-                    {
-                        loader: 'less-loader'
-                    }
-
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'less-loader'
                 ]
             },
             {
                 test:/\.tsx?$/,
-                loader:"ts-loader",
-                exclude:/node_modules/
+                loader:"awesome-typescript-loader"
             }
         ]
-    },
-    resolve: {
-        extensions: ['.tsx', '.ts', '.js']
-
-    },
-    output: {
-        path:path.resolve(__dirname, "build"),
-        filename:"bundle.js",
     },
     plugins:[
         new HtmlWebpackPlugin({
             template: "./index.html"
+        }),
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: "[name].css",
+            chunkFilename: "[id].css"
         })
     ],
     devtool: "inline-source-map"
