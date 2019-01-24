@@ -7,9 +7,6 @@ class App extends React.Component<any,any>{
         return(
             <div className="plus">
                 hello
-                <div className="test">
-                    aljskjahn
-                </div>
             </div>
         )
     }
